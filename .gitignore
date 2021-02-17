@@ -1,0 +1,12 @@
+# IntellijIdea files
+*.iml
+.idea
+out
+debug.*
+
+# Gradle
+.gradle
+
+# Build
+build/
+TestNG/build/

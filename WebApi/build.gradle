@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    groovyVer = "3.0.6"
+}
+
+configurations {
+    testImplementation.exclude group: "org.hamcrest", module: "hamcrest-core"
+}
+
+dependencies {
+    testImplementation (group: 'io.rest-assured', name: 'rest-assured', version: '4.3.3')
+            {
+                exclude group: "org.codehaus.groovy"
+            }
+    testRuntimeOnly group: "org.codehaus.groovy", name: "groovy", version: "$groovyVer"
+    testRuntimeOnly group: "org.codehaus.groovy", name: "groovy-xml", version: "$groovyVer"
+    testRuntimeOnly group: "org.codehaus.groovy", name: "groovy-json", version: "$groovyVer"
+}
+
+compileTestJava {
+    doFirst() {
+        options.compilerArgs = [ "--module-path", classpath.asPath,
+                "--add-modules", "org.testng",
+                "--add-modules", "io.github.sskorol.testdatasupplier",
+                "--add-modules", "lombok"
+
+        ]
+        classpath = files()
+    }
+}
+
+test {
+    systemProperties System.getProperties()
+    systemProperty "testng.dtd.http", true
+    reports.html.enabled = false
+    useTestNG()
+    {
+        suites 'src/test/resources/testng.xml'
+    }
+}

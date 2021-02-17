@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation group: 'com.codeborne', name: 'selenide', version: '5.18.1'
+}
+
+compileTestJava {
+    doFirst() {
+        options.compilerArgs = [
+                "--module-path", classpath.asPath,
+                "--add-modules", "org.testng",
+                "--add-modules", "io.github.sskorol.testdatasupplier",
+                "--add-modules", "com.codeborne.selenide",
+                "--add-modules", "lombok"
+        ]
+        classpath = files()
+    }
+}
+
+test {
+    systemProperties System.getProperties()
+    systemProperty "testng.dtd.http", true
+    reports.html.enabled = false
+
+    useTestNG()
+            {
+                useDefaultListeners = true
+                suites 'src/test/resources/testng.xml'
+            }
+}

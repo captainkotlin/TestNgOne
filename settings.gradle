@@ -1,0 +1,4 @@
+rootProject.name = 'TestNgOne'
+include 'WebApi'
+include 'WebUi'
+
